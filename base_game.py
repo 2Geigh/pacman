@@ -1,8 +1,10 @@
 import pygame
 from pygame.locals import *
 import classes
+from random import random
+from random import uniform
 
-pygame.init();
+pygame.init()
 
 #dimensions and attributes for the game's viewport window
 window_width = 1000 #px
@@ -46,8 +48,17 @@ player2_colour = RED
 
 ball_initial_top = ((window_height / 2) - (ball_diameter / 2))
 ball_initial_left = ((window_width / 2) - (ball_diameter / 2))
-ball_initial_speed_horizontal = 0
+
+#setting initial speed and horizontal direction of ball
+if random() > 0.5:
+    ball_initial_speed_horizontal = 0.66
+else:
+    ball_initial_speed_horizontal = -0.66
+
+#getting a random vertical velocity so that the ball doesn't have the same tragectory every time
 ball_initial_speed_vertical = 0
+while ball_initial_speed_vertical == 0:
+    ball_initial_speed_vertical = uniform(-0.66, 0.66)
 
 player1 = classes.Player(player1_initial_left, player1_initial_top, player1_initial_speed_horizontal, player1_initial_speed_vertical, paddle_height, paddle_width, player1_colour)
 player2 = classes.Player(player2_initial_left, player2_initial_top, player2_initial_speed_horizontal, player2_initial_speed_vertical, paddle_height, paddle_width, player2_colour)
@@ -87,6 +98,14 @@ while (window_run_status):
     #quit control
     elif keys[pygame.K_ESCAPE]:
         window_run_status = False
+
+
+    #ball collision
+    if ball.position[0] < 0 or ball.position[0] > window_width:
+        ball.collide_along_x()
+    if ball.position[1] < 0 or ball.position[1] > window_height:
+        ball.collide_along_y()
+
 
     #update sprites
     player1.update()

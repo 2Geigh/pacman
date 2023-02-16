@@ -45,14 +45,7 @@ class ball(pygame.sprite.Sprite):
     def draw(self, surface) :
         pygame.draw.circle(surface, (255, 0, 0), self.position, 10)
 
-    def move_up(self):
-        self.speed = (0, 0.5)
-
-    def move_down(self):
-        self.speed = (0, -0.5)
-
-    def move_left(self):
-        self.speed = (-0.5, 0)
-
-    def move_right(self):
-        self.speed = (0.5, 0)
+    def collide_along_x(self):
+        self.speed = (-self.speed[0], self.speed[1])
+    def collide_along_y(self):
+        self.speed = (self.speed[0], -self.speed[1])
