@@ -42,6 +42,7 @@ player2_initial_top = player1_initial_top
 player2_initial_left = (window_width - (window_width * 0.05))
 player2_initial_speed_horizontal = 0
 player2_initial_speed_vertical = 0
+player2_colour = BLUE
 
 ball_initial_top = ((window_height / 2) - (ball_diameter / 2))
 ball_initial_left = ((window_width / 2) - (ball_diameter / 2))
@@ -63,7 +64,7 @@ pygame.display.flip()
 """
 
 player1 = classes.Player(player1_initial_left, player1_initial_top, player1_initial_speed_horizontal, player1_initial_speed_vertical, paddle_height, paddle_width, player1_colour)
-
+player2 = classes.Player(player2_initial_left, player2_initial_top, player2_initial_speed_horizontal, player2_initial_speed_vertical, paddle_height, paddle_width, player2_colour)
 #player1 = pygame.Rect(player1_initial_left, player1_initial_top, paddle_width, paddle_height)
 
 #keep viewport window open if game is running
@@ -73,19 +74,31 @@ while (window_run_status):
             window_run_status = False
 
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_UP]:
+    #player1 controls
+    if keys[pygame.K_w]:
         player1.move_up()
-    elif keys[pygame.K_DOWN]:
+    elif keys[pygame.K_s]:
         player1.move_down()
+
+    #player2 controls
+    elif keys[pygame.K_UP]:
+        player2.move_up()
+    elif keys[pygame.K_DOWN]:
+        player2.move_down()
+
+    elif keys[pygame.K_ESCAPE]:
+        window_run_status = False
 
     #update sprites
     player1.update()
+    player2.update()
 
     #clear the window
     window.fill(background_colour)
 
     #draw player sprite
     player1.draw(window)
+    player2.draw(window)
 
     #update the display
     pygame.display.update()
