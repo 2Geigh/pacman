@@ -33,7 +33,6 @@ class Player(pygame.sprite.Sprite):
         self.speed = (player_speed_x, 0)
 
 
-"""BALL CLASS TO MAKE LATER
 class ball(pygame.sprite.Sprite):
     def __init__(self, x, y, speed_x, speed_y) -> None:
         super().__init__()
@@ -57,4 +56,3 @@ class ball(pygame.sprite.Sprite):
 
     def move_right(self):
         self.speed = (0.5, 0)
-"""
