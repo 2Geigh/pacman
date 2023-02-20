@@ -28,10 +28,14 @@ background_colour = (0,0,0)
 paddle_height = 50
 paddle_width = 10
 paddle_thickness = 1
+paddle_bound_x = (0, window_width)
+paddle_bound_y = (0, window_height)
 ball_diameter = 15
 ball_width = ball_diameter
 ball_height = ball_diameter
 ball_thickness = paddle_thickness
+ball_bound_x = (0 + ball_width/2, window_width - ball_width/2)
+ball_bound_y = (0 + ball_width/2, window_height - ball_width/2)
 
 #initial positions for player 1, player 2, and the ball
 player1_initial_top = (window_height / 2) - (paddle_height / 2)
@@ -44,10 +48,11 @@ player2_initial_top = player1_initial_top
 player2_initial_left = (window_width - (window_width * 0.05))
 player2_initial_speed_horizontal = 0
 player2_initial_speed_vertical = 0
-player2_colour = RED
+player2_colour = BLUE
 
 ball_initial_top = ((window_height / 2) - (ball_diameter / 2))
 ball_initial_left = ((window_width / 2) - (ball_diameter / 2))
+ball_colour = RED
 
 #setting initial speed and horizontal direction of ball
 if random() > 0.5:
@@ -58,14 +63,15 @@ else:
 #getting a random vertical velocity so that the ball doesn't have the same tragectory every time
 ball_initial_speed_vertical = 0
 while ball_initial_speed_vertical == 0:
-    ball_initial_speed_vertical = uniform(-0.66, 0.66)
+    ball_initial_speed_vertical = uniform(-0.33, 0.33)
 
-player1 = classes.Player(player1_initial_left, player1_initial_top, player1_initial_speed_horizontal, player1_initial_speed_vertical, paddle_height, paddle_width, player1_colour)
-player2 = classes.Player(player2_initial_left, player2_initial_top, player2_initial_speed_horizontal, player2_initial_speed_vertical, paddle_height, paddle_width, player2_colour)
-ball = classes.ball(ball_initial_left, ball_initial_top, ball_initial_speed_horizontal, ball_initial_speed_vertical)
+player1 = classes.Player(player1_initial_left, player1_initial_top, player1_initial_speed_horizontal, player1_initial_speed_vertical, paddle_height, paddle_width, player1_colour, paddle_bound_x, paddle_bound_y)
+player2 = classes.Player(player2_initial_left, player2_initial_top, player2_initial_speed_horizontal, player2_initial_speed_vertical, paddle_height, paddle_width, player2_colour, paddle_bound_x, paddle_bound_y)
+ball = classes.ball(ball_initial_left, ball_initial_top, ball_initial_speed_horizontal, ball_initial_speed_vertical, ball_width, ball_height, ball_bound_x, ball_bound_y, ball_colour)
 
 #keep viewport window open if game is running
 while (window_run_status):
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             window_run_status = False
@@ -100,11 +106,18 @@ while (window_run_status):
         window_run_status = False
 
 
-    #ball collision
-    if ball.position[0] < 0 or ball.position[0] > window_width:
+    #ball collision with wall
+    if ball.position[0] <= ball.bounds_x[0] or ball.position[0] >= ball.bounds_x[1]:
         ball.collide_along_x()
+        #ball.stop()
     if ball.position[1] < 0 or ball.position[1] > window_height:
         ball.collide_along_y()
+
+    #ball collision with paddles
+    if ball.hitbox.colliderect(player1.hitbox):
+        ball.paddle_collide()
+    elif ball.hitbox.colliderect(player2.hitbox):
+        ball.paddle_collide()
 
 
     #update sprites
