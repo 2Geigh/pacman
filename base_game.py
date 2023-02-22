@@ -5,6 +5,7 @@ from random import random
 from random import uniform
 
 pygame.init()
+pygame.font.init()
 
 #dimensions and attributes for the game's viewport window
 window_width = 1000 #px
@@ -79,6 +80,13 @@ ball = classes.ball(ball_initial_left, ball_initial_top, get_ball_initial_speed(
 READY_TIME = 1500 #ms #the amount of time inbetween when the game is reset and when the game starts
 PAUSE_TIME = 750 #ms #the amount of time inbetween when a point is scored and when the game resets
 
+
+#for the score
+player1_score_position = (window_width / 3, window_height / 6)
+player2_score_position = (window_width / 3 * 2, window_height / 6)
+score_font_size = int(window_height / 5)
+score_font = pygame.font.SysFont('Consolas', score_font_size, True, False)
+
 #keep viewport window open if game is running
 while (window_run_status):
 
@@ -100,6 +108,12 @@ while (window_run_status):
     player1.draw(window)
     player2.draw(window)
     ball.draw(window)
+
+    player1_score_surface = score_font.render(str(player1.score), False, WHITE)
+    player2_score_surface = score_font.render(str(player2.score), False, WHITE)
+    window.blit(player1_score_surface, player1_score_position)
+    window.blit(player2_score_surface, player2_score_position)
+
     pygame.display.update()
     
     pygame.time.wait(READY_TIME)
@@ -116,9 +130,9 @@ while (window_run_status):
             ball.stop()
 
             if ball.position[0] <= ball.bounds_x[0]:
-                player1.score += 1
-            else:
                 player2.score += 1
+            else:
+                player1.score += 1
             game_run = False #Tells the round to stop and restart when a point is scored
 
         #controls
@@ -174,6 +188,8 @@ while (window_run_status):
         player2.draw(window)
         ball.draw(window)
 
+        window.blit(player1_score_surface, player1_score_position)
+        window.blit(player2_score_surface, player2_score_position)
         #update the display
         pygame.display.update()
     
