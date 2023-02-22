@@ -15,6 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.bounds_x = bounds_horizontal
         self.bounds_y = bounds_vertical
         self.hitbox = pygame.Rect(self.position, (self.width, self.height))
+        self.score = 0
 
     def update(self):
         self.position = (self.position[0] + self.speed[0], self.position[1] - self.speed[1])
@@ -66,7 +67,6 @@ class ball(pygame.sprite.Sprite):
         self.speed = (self.speed[0], -self.speed[1])
 
     def paddle_collide(self):
-        speed_change_factor = 0.1
         if random.random() > 0.9:
             self.speed = (self.speed[0], random.uniform(-0.5, 0.5))
         else:
